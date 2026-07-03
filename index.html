@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thaatha Petti Kadai - Traditional Snacks & Sweets</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script>
+        // Fallback if CDN fails
+        if (typeof initSqlJs === 'undefined') {
+            console.error('sql.js failed to load from CDN');
+            alert('Failed to load database library. Please check your internet connection and refresh the page.');
+        }
+    </script>
+    <script src="static/js/database.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo" onclick="navigateTo('home')">
+                    <img src="static/images/TPK_title_logo.png" alt="Thaatha Petti Kadai" class="logo-img">
+                </div>
+            </div>
+            <div class="nav-section">
+                <ul class="nav-links">
+                    <li><a onclick="navigateTo('home')">Home</a></li>
+                    <li><a onclick="navigateTo('home'); setTimeout(() => document.getElementById('about').scrollIntoView({behavior: 'smooth'}), 100)">About Us</a></li>
+                    <li class="dropdown">
+                        <a onclick="navigateTo('products')">Products ▼</a>
+                        <div class="dropdown-content">
+                            <a onclick="navigateTo('products', 'all')">All Products</a>
+                            <a onclick="navigateTo('products', 'peanut')">Peanut</a>
+                            <a onclick="navigateTo('products', 'nice-peanut-koko')">Nice Peanut (Koko)</a>
+                            <a onclick="navigateTo('products', 'ellu')">Ellu</a>
+                            <a onclick="navigateTo('products', 'omapodi')">Omapodi</a>
+                            <a onclick="navigateTo('products', 'ginger-candy')">Ginger Candy</a>
+                            <a onclick="navigateTo('products', 'roasted-gram')">Roasted Gram</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="cart-icon" onclick="navigateTo('cart')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    Cart
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page-section active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-image">
+                    <img src="static/images/TPK_logo.png" alt="Thaatha Petti Kadai">
+                </div>
+                <div class="hero-content">
+                    <h1>Traditional Snacks, Modern Health</h1>
+                    <h2>Protein-Rich Goodness from Grandpa's Kitchen</h2>
+                    <p>Discover authentic Indian snacks crafted with love using traditional recipes and natural ingredients. Perfect blend of taste and nutrition for your healthy lifestyle.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="navigateTo('products')">Shop Now</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('benefits').scrollIntoView({behavior: 'smooth'})">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits" id="benefits">
+            <div class="section-header">
+                <h3>Why Choose Our Snacks?</h3>
+                <p>Nutritional value meets traditional taste</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌿</div>
+                    <h4>100% Natural</h4>
+                    <p>Made with pure, natural ingredients without any artificial preservatives or additives.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💪</div>
+                    <h4>Protein Rich</h4>
+                    <p>Our snacks are packed with protein from peanuts, nuts, and wholesome ingredients.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🏠</div>
+                    <h4>Traditional Recipe</h4>
+                    <p>Handcrafted using age-old recipes passed down through generations.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">❤️</div>
+                    <h4>Heart Healthy</h4>
+                    <p>Low in bad cholesterol and high in nutrients that support cardiovascular health.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section class="products-section">
+            <div class="section-header">
+                <h3>Our Featured Products</h3>
+                <p>Discover our range of traditional healthy snacks</p>
+            </div>
+            <div class="products-grid" id="featured-products">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-primary" onclick="navigateTo('products')">View All Products</button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="about">
+            <div class="about-container">
+                <h3>About Thaatha Petti Kadai</h3>
+                <p>Thaatha Petti Kadai (Grandpa's Box Shop) is more than just a snack store - it's a tribute to our heritage. 
+                We bring you the authentic taste of traditional Indian snacks, made with the same love and care that our 
+                grandfathers put into every batch.</p>
+                <p>From protein-rich peanut barfi to wholesome protein balls, each product is crafted using time-tested 
+                recipes and the finest natural ingredients. We believe that healthy eating shouldn't mean compromising 
+                on taste, and our snacks are a testament to that philosophy.</p>
+                <p>Every bite takes you on a journey back to simpler times, to the warmth of grandpa's kitchen, 
+                where tradition meets health in perfect harmony.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- PRODUCTS PAGE -->
+    <div id="page-products" class="page-section">
+        <div class="page-header">
+            <h1 id="products-page-title">All Products</h1>
+            <p id="products-page-subtitle">Browse our complete collection</p>
+        </div>
+        <div class="products-container">
+            <aside class="sidebar">
+                <h4>Categories</h4>
+                <ul class="category-list" id="category-list">
+                    <li><a onclick="filterProducts('all')" class="category-link active" data-category="all">All Products</a></li>
+                    <!-- Categories will be loaded by JavaScript -->
+                </ul>
+            </aside>
+
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAIL PAGE -->
+    <div id="page-product-detail" class="page-section">
+        <div class="product-detail-container">
+            <div class="breadcrumb">
+                <a onclick="navigateTo('home')">Home</a> / 
+                <a onclick="navigateTo('products')">Products</a> / 
+                <span id="breadcrumb-category">Category</span> / 
+                <span id="breadcrumb-product">Product Name</span>
+            </div>
+
+            <div class="product-detail">
+                <div class="product-image-section">
+                    <img id="product-image" src="" alt="Product Image" style="max-width: 100%; max-height: 400px; object-fit: contain; border-radius: 12px; display: none;">
+                    <div class="product-image-placeholder" id="product-image-placeholder" style="font-size: 150px;">🥜</div>
+                </div>
+
+                <div class="product-info-section">
+                    <div class="product-category" id="product-category">Category</div>
+                    <h1 class="product-name" id="product-name">Product Name</h1>
+                    <div class="product-price" id="product-price">₹0</div>
+                    
+                    <p class="product-description" id="product-description">Description</p>
+
+                    <div class="nutrition-section">
+                        <h4>🌿 Nutritional Benefits</h4>
+                        <p id="product-nutrition">Nutritional information</p>
+                    </div>
+
+                    <div class="stock-info" id="stock-info">
+                        <span class="stock-available">✓ In Stock</span>
+                    </div>
+
+                    <form id="add-to-cart-form" class="add-to-cart-form">
+                        <div class="quantity-selector">
+                            <button type="button" onclick="decreaseQuantity()">-</button>
+                            <input type="number" id="quantity" value="1" min="1" max="100">
+                            <button type="button" onclick="increaseQuantity()">+</button>
+                        </div>
+                        <button type="submit" class="btn-add-cart" id="add-to-cart-btn">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-section" id="related-section" style="max-width: 1200px; margin: 60px auto; padding: 0 30px;">
+            <h3 style="font-size: 1.5rem; color: var(--primary); margin-bottom: 25px;">You May Also Like</h3>
+            <div class="products-grid" id="related-grid">
+                <!-- Related products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CART PAGE -->
+    <div id="page-cart" class="page-section">
+        <div class="cart-container">
+            <div class="cart-header">
+                <h1>🛒 Shopping Cart</h1>
+                <p>Review your items and proceed to checkout</p>
+            </div>
+
+            <div id="cart-content">
+                <!-- Cart items will be loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT PAGE -->
+    <div id="page-checkout" class="page-section">
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h1>🛍️ Checkout</h1>
+                <p>Complete your order</p>
+            </div>
+
+            <div class="login-prompt">
+                <p>For faster checkout, consider using our <span style="color: var(--primary); font-weight: 600; cursor: pointer;" onclick="navigateTo('cart')">WhatsApp ordering system</span>.</p>
+            </div>
+
+            <form id="checkoutForm" class="checkout-form">
+                <div class="order-summary">
+                    <h4>Order Summary</h4>
+                    <div id="checkout-order-items">
+                        <!-- Order items will be loaded by JavaScript -->
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span id="checkout-order-total">₹0</span>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>📍 Shipping Address</h3>
+                    <div class="form-group">
+                        <label for="shipping_address">Full Address *</label>
+                        <textarea id="shipping_address" name="shipping_address" required placeholder="Enter your complete shipping address including street, city, state, and PIN code"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>👤 Contact Information</h3>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+91 98765 43210">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Place Order</button>
+
+                <div class="secure-badge">
+                    🔒 Your information is secure. We never share your data.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER CONFIRMATION PAGE -->
+    <div id="page-order-confirmation" class="page-section">
+        <div class="confirmation-container">
+            <div class="success-icon">✓</div>
+            <h1>Order Placed Successfully!</h1>
+            <p>Thank you for your order. We've received your order details.</p>
+
+            <div class="order-details">
+                <h3>📦 Order Details</h3>
+                
+                <div class="detail-row">
+                    <span class="label">Order Date</span>
+                    <span class="value" id="order-date"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Status</span>
+                    <span class="value status-pending">Pending</span>
+                </div>
+
+                <div class="items-list">
+                    <h4>Items Ordered</h4>
+                    <div id="order-items">
+                        <!-- Order items will be loaded by JavaScript -->
+                    </div>
+                    <div class="order-total">
+                        <span>Total</span>
+                        <span id="order-total">₹0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h4>What's Next?</h4>
+                <ul>
+                    <li>We'll prepare your order within 24 hours</li>
+                    <li>You'll receive confirmation via WhatsApp</li>
+                    <li>Estimated delivery: 3-5 business days</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="btn btn-primary" onclick="navigateTo('home')">Continue Shopping</button>
+                <button class="btn btn-outline" onclick="navigateTo('products')">Browse Products</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH PAGE -->
+    <div id="page-search" class="page-section">
+        <div class="search-container">
+            <div class="search-header">
+                <h1>🔍 Search Products</h1>
+                <form id="searchForm" class="search-form">
+                    <div class="search-input-group">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search for snacks, sweets..." required>
+                        <button type="submit" class="search-btn">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="search-results">
+                <!-- Search results will be loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Thaatha Petti Kadai</h4>
+                <p>Traditional snacks made with love, bringing the taste of heritage to your home.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a onclick="navigateTo('home')">Home</a>
+                <a onclick="navigateTo('products')">Products</a>
+                <a onclick="navigateTo('cart')">Cart</a>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <a onclick="navigateTo('products', 'peanut')">Peanut</a>
+                <a onclick="navigateTo('products', 'nice-peanut-koko')">Nice Peanut (Koko)</a>
+                <a onclick="navigateTo('products', 'ellu')">Ellu</a>
+                <a onclick="navigateTo('products', 'omapodi')">Omapodi</a>
+                <a onclick="navigateTo('products', 'ginger-candy')">Ginger Candy</a>
+                <a onclick="navigateTo('products', 'roasted-gram')">Roasted Gram</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: thaathapettikadai@gmail.com</p>
+                <p>Phone: +91 98402 65829</p>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 Thaatha Petti Kadai. | From
+        <a href="https://kreativ2214.pythonanywhere.com/" target="_blank"> KreatiV</a>
+</div>
+    </footer>
+
+    <script>
+        // Load products from localStorage or use default data
+        const defaultProducts = [
+            {
+                id: 1,
+                name: "Peanut Barfi",
+                category: "sweets",
+                price: 250,
+                description: "Protein-rich peanut barfi made with pure ghee and jaggery",
+                nutritional_benefits: "High in protein from peanuts\nNatural sweetness from jaggery\nRich in healthy fats\nGood source of energy",
+                stock: 50,
+                image: "static/images/peanut-barfi.jpg"
+            },
+            {
+                id: 2,
+                name: "Protein Balls",
+                category: "snacks",
+                price: 180,
+                description: "Energy balls packed with nuts, dates, and seeds",
+                nutritional_benefits: "High protein content\nRich in fiber\nNatural energy booster\nContains omega-3 fatty acids",
+                stock: 30,
+                image: "static/images/protein-balls.jpg"
+            },
+            {
+                id: 3,
+                name: "Spicy Peanut Mixture",
+                category: "mixtures",
+                price: 150,
+                description: "Traditional South Indian mixture with peanuts and spices",
+                nutritional_benefits: "Good source of protein\nContains healthy fats\nSpices aid digestion\nLow in sugar",
+                stock: 8,
+                image: "static/images/spicy-mixture.jpg"
+            },
+            {
+                id: 4,
+                name: "Coconut Burfi",
+                category: "sweets",
+                price: 200,
+                description: "Sweet coconut burfi with cardamom flavor",
+                nutritional_benefits: "Rich in healthy fats\nContains medium-chain triglycerides\nNatural sweetness\nGood source of fiber",
+                stock: 25,
+                image: "static/images/coconut-burfi.jpg"
+            },
+            {
+                id: 5,
+                name: "Roasted Peanuts",
+                category: "snacks",
+                price: 120,
+                description: "Crunchy roasted peanuts with light salt seasoning",
+                nutritional_benefits: "High protein content\nRich in healthy fats\nGood source of vitamins and minerals\nLow in carbohydrates",
+                stock: 100,
+                image: "static/images/roasted-peanuts.jpg"
+            },
+            {
+                id: 6,
+                name: "Murukku",
+                category: "mixtures",
+                price: 160,
+                description: "Crispy rice flour murukku with cumin seeds",
+                nutritional_benefits: "Gluten-free\nContains cumin for digestion\nCrispy and satisfying\nModerate protein content",
+                stock: 40,
+                image: "static/images/murukku.jpg"
+            },
+            {
+                id: 7,
+                name: "Cashew Barfi",
+                category: "sweets",
+                price: 350,
+                description: "Rich cashew barfi with silver foil garnish",
+                nutritional_benefits: "High in healthy fats\nGood source of protein\nContains minerals like copper and magnesium\nEnergy-dense",
+                stock: 20,
+                image: "static/images/cashew-barfi.jpg"
+            },
+            {
+                id: 8,
+                name: "Almond Energy Bites",
+                category: "snacks",
+                price: 280,
+                description: "Healthy almond and date energy bites",
+                nutritional_benefits: "High protein content\nRich in vitamin E\nNatural energy source\nContains healthy fats",
+                stock: 35,
+                image: "static/images/almond-bites.jpg"
+            }
+        ];
+
+        // Load products from database or use default
+        let products = [];
+        let cart = [];
+        let categories = [];
+        let currentProduct = null;
+
+        // Initialize database and load data
+        async function initializeApp() {
+            try {
+                await dbService.init();
+                
+                products = await dbService.getProducts();
+                categories = await dbService.getCategories();
+                cart = await dbService.getCart();
+                
+                updateCartCount();
+                renderFeaturedProducts();
+                filterProducts('all');
+                loadCategories();
+            } catch (error) {
+                console.error('Error initializing database:', error);
+                // Keep catalog empty if the API fails instead of showing old demo data.
+                products = [];
+                cart = JSON.parse(localStorage.getItem('cart')) || [];
+                updateCartCount();
+                renderFeaturedProducts();
+                filterProducts('all');
+            }
+        }
+
+        // Load categories into navigation and sidebar
+        function loadCategories() {
+            // Update dropdown in header
+            const categoryDropdown = document.querySelector('.dropdown-content');
+            if (categoryDropdown && categories.length > 0) {
+                const categoryLinks = categories.map(cat => 
+                    `<a onclick="navigateTo('products', '${cat.slug}')">${cat.name}</a>`
+                ).join('');
+                
+                // Keep the "All Products" link and add categories
+                categoryDropdown.innerHTML = `
+                    <a onclick="navigateTo('products', 'all')">All Products</a>
+                    ${categoryLinks}
+                `;
+            }
+
+            // Update sidebar categories
+            const categoryList = document.getElementById('category-list');
+            if (categoryList && categories.length > 0) {
+                const categoryLinks = categories.map(cat => 
+                    `<li><a onclick="filterProducts('${cat.slug}')" class="category-link" data-category="${cat.slug}">${cat.name}</a></li>`
+                ).join('');
+                
+                // Keep the "All Products" link and add categories
+                categoryList.innerHTML = `
+                    <li><a onclick="filterProducts('all')" class="category-link active" data-category="all">All Products</a></li>
+                    ${categoryLinks}
+                `;
+            }
+        }
+        
+        // Navigation
+        function navigateTo(page, param = null) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target page
+            const targetPage = document.getElementById('page-' + page);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+
+            // Handle page-specific logic
+            if (page === 'products' && param) {
+                filterProducts(param);
+            } else if (page === 'products') {
+                filterProducts('all');
+            } else if (page === 'cart') {
+                renderCart();
+            } else if (page === 'checkout') {
+                renderCheckoutSummary();
+            } else if (page === 'search') {
+                performSearch('');
+            }
+        }
+
+        // Cart management
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        async function addToCart(productId, quantity = 1) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: quantity
+                });
+            }
+
+            try {
+                await dbService.clearCart();
+                for (const item of cart) {
+                    await dbService.addToCart(item);
+                }
+                updateCartCount();
+                alert(`${product.name} added to cart!`);
+            } catch (error) {
+                console.error('Error saving cart:', error);
+                // Fallback to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                alert(`${product.name} added to cart!`);
+            }
+        }
+
+        async function updateQuantity(productId, newQuantity) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                if (newQuantity <= 0) {
+                    removeFromCart(productId);
+                    return;
+                }
+                item.quantity = newQuantity;
+                try {
+                    await dbService.clearCart();
+                    for (const cartItem of cart) {
+                        await dbService.addToCart(cartItem);
+                    }
+                    renderCart();
+                    updateCartCount();
+                } catch (error) {
+                    console.error('Error updating cart:', error);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCart();
+                    updateCartCount();
+                }
+            }
+        }
+
+        async function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            try {
+                await dbService.clearCart();
+                for (const cartItem of cart) {
+                    await dbService.addToCart(cartItem);
+                }
+                renderCart();
+                updateCartCount();
+            } catch (error) {
+                console.error('Error removing from cart:', error);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+                updateCartCount();
+            }
+        }
+
+        function calculateTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+
+        function sendWhatsAppOrder() {
+            const name = document.getElementById('customer_name').value.trim();
+            const phone = document.getElementById('customer_phone').value.trim();
+            const address = document.getElementById('customer_address').value.trim();
+        
+            // Phone validation
+            if (!/^\d{10}$/.test(phone)) {
+                alert("Please enter a valid 10-digit phone number");
+                return; // stop here
+            }
+        
+            // Empty field validation
+            if (!name || !phone || !address) {
+                alert('Please fill in all your details (Name, Phone, and Address) before ordering.');
+                return;
+            }
+        
+            let message = '🛒 *New Order from Thaatha Petti Kadai*\n\n';
+            message += '👤 *Customer Details:*\n';
+            message += 'Name: ' + name + '\n';
+            message += 'Phone: ' + phone + '\n';
+            message += 'Address: ' + address + '\n\n';
+        
+            message += '📦 *Order Items:*\n';
+        
+            cart.forEach(function(item) {
+                message += item.quantity + 'x ' + item.name + ' - ₹' + (item.price * item.quantity) + '\n';
+            });
+        
+            message += '\n💰 *Total Amount: ₹' + calculateTotal() + '*\n\n';
+            message += '💳 Payment via UPI/GPay/PhonePe/Paytm\n\n';
+            message += 'Thank you for choosing Thaatha Petti Kadai! 🙏';
+        
+            const whatsappNumber = '919840265829';
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = 'https://wa.me/' + whatsappNumber + '?text=' + encodedMessage;
+        
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Render functions
+        function renderProductCard(product, showQuantity = false) {
+            return `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '🥜'}
+                        ${product.stock <= 5 && product.stock > 0 ? '<span class="product-badge">Low Stock</span>' : ''}
+                        ${product.stock === 0 ? '<span class="product-badge" style="background: #dc3545;">Out of Stock</span>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                        <div class="product-name" onclick="showProductDetail(${product.id})">${product.name}</div>
+                        <p class="product-description">${product.description}</p>
+                        ${product.weight ? `<p class="product-weight">${product.weight}</p>` : ''}
+                        <div class="product-footer">
+                            <span class="product-price">₹${product.price}</span>
+                            ${product.stock > 0 ? 
+                                `<button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>` : 
+                                `<button class="add-to-cart" disabled style="background: #ccc; cursor: not-allowed;">Out of Stock</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFeaturedProducts() {
+            const container = document.getElementById('featured-products');
+            container.innerHTML = products.slice(0, 4).map(p => renderProductCard(p)).join('');
+        }
+
+        function filterProducts(category) {
+            const container = document.getElementById('products-grid');
+            const filteredProducts = category === 'all' 
+                ? products 
+                : products.filter(p => p.category === category);
+
+            // Update category links
+            document.querySelectorAll('.category-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.category === category) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Get category name for title
+            let categoryName = 'All Products';
+            let categorySubtitle = 'Browse our complete collection';
+            
+            if (category !== 'all') {
+                const categoryObj = categories.find(c => c.slug === category);
+                if (categoryObj) {
+                    categoryName = categoryObj.name;
+                    categorySubtitle = `Browse our ${categoryObj.name.toLowerCase()} collection`;
+                }
+            }
+
+            document.getElementById('products-page-title').textContent = categoryName;
+            document.getElementById('products-page-subtitle').textContent = categorySubtitle;
+
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; grid-column: 1 / -1; padding: 40px;">
+                        <p style="font-size: 1.2rem; color: var(--gray);">No products found in this category.</p>
+                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="filterProducts('all')">View All Products</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredProducts.map(p => renderProductCard(p)).join('');
+        }
+
+        function showProductDetail(productId) {
+            currentProduct = products.find(p => p.id === productId);
+            if (!currentProduct) return;
+
+            document.getElementById('breadcrumb-category').textContent = currentProduct.category.charAt(0).toUpperCase() + currentProduct.category.slice(1);
+            document.getElementById('breadcrumb-product').textContent = currentProduct.name;
+            document.getElementById('product-category').textContent = currentProduct.category.charAt(0).toUpperCase() + currentProduct.category.slice(1);
+            document.getElementById('product-name').textContent = currentProduct.name;
+            document.getElementById('product-price').textContent = `₹${currentProduct.price}`;
+            document.getElementById('product-description').textContent = currentProduct.description;
+            document.getElementById('product-nutrition').textContent = currentProduct.nutritional_benefits;
+
+            // Update product image
+            const productImage = document.getElementById('product-image');
+            const productImagePlaceholder = document.getElementById('product-image-placeholder');
+            
+            if (currentProduct.image) {
+                productImage.src = currentProduct.image;
+                productImage.style.display = 'block';
+                productImagePlaceholder.style.display = 'none';
+            } else {
+                productImage.style.display = 'none';
+                productImagePlaceholder.style.display = 'block';
+            }
+
+            // Update stock info
+            const stockInfo = document.getElementById('stock-info');
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.max = currentProduct.stock;
+
+            if (currentProduct.stock > 10) {
+                stockInfo.innerHTML = `<span class="stock-available">✓ In Stock (${currentProduct.stock} available)</span>`;
+                addToCartBtn.disabled = false;
+            } else if (currentProduct.stock > 0) {
+                stockInfo.innerHTML = `<span class="stock-low">⚠ Low Stock - Only ${currentProduct.stock} left!</span>`;
+                addToCartBtn.disabled = false;
+            } else {
+                stockInfo.innerHTML = `<span class="stock-out">✗ Out of Stock</span>`;
+                addToCartBtn.disabled = true;
+            }
+
+            // Render related products
+            const relatedContainer = document.getElementById('related-grid');
+            const relatedProducts = products
+                .filter(p => p.id !== currentProduct.id && p.category === currentProduct.category)
+                .slice(0, 4);
+
+            if (relatedProducts.length === 0) {
+                document.getElementById('related-section').style.display = 'none';
+            } else {
+                document.getElementById('related-section').style.display = 'block';
+                relatedContainer.innerHTML = relatedProducts.map(p => renderProductCard(p)).join('');
+            }
+
+            navigateTo('product-detail');
+        }
+
+        function increaseQuantity() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) < parseInt(input.max)) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
+        function decreaseQuantity() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const quantity = parseInt(document.getElementById('quantity').value);
+            addToCart(currentProduct.id, quantity);
+        });
+
+        function renderCart() {
+            const container = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">🛒</div>
+                        <h2>Your Cart is Empty</h2>
+                        <p>Looks like you haven't added any items yet. Explore our delicious traditional snacks!</p>
+                        <button class="btn btn-primary" onclick="navigateTo('products')">Start Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const cartItemsHTML = cart.map(item => {
+                const product = products.find(p => p.id === item.id) || { category: 'Unknown', image: null };
+                return `
+                    <div class="cart-item" data-product-id="${item.id}">
+                        <div class="cart-item-image">
+                            ${product.image ? `<img src="${product.image}" alt="${item.name}">` : '🥜'}
+                        </div>
+                        <div class="cart-item-info">
+                            <h4><span onclick="showProductDetail(${item.id})">${item.name}</span></h4>
+                            <div class="cart-item-category">${product.category}</div>
+                            <div class="cart-item-price">₹${item.price} each</div>
+                        </div>
+                        <div class="cart-item-price" style="text-align: right;">
+                            ₹${item.price * item.quantity}
+                        </div>
+                        <div class="quantity-form">
+                            <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)">
+                            <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${item.id})" title="Remove item">🗑️</button>
+                    </div>
+                `;
+            }).join('');
+
+            const total = calculateTotal();
+            const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            container.innerHTML = `
+                <div class="cart-items">
+                    ${cartItemsHTML}
+                </div>
+
+                <div class="customer-form">
+                    <h3>📋 Enter Your Details</h3>
+                    <div class="form-group">
+                        <label for="customer_name">Your Name *</label>
+                        <input type="text" id="customer_name" name="customer_name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_phone">Phone Number *</label>
+                        <input type="tel" id="customer_phone" name="customer_phone" placeholder="+91 98765 43210" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer_address">Delivery Address *</label>
+                        <textarea id="customer_address" name="customer_address" rows="3" placeholder="Enter your complete address with landmark" required></textarea>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <span>Total (${itemCount} items)</span>
+                        <span>₹${total}</span>
+                    </div>
+                    <div class="payment-info">
+                        <p>💳 <strong>Payment via WhatsApp</strong></p>
+                        <p>UPI / GPay / PhonePe / Paytm accepted</p>
+                    </div>
+                    <div class="cart-actions">
+                        <button class="btn btn-outline" onclick="navigateTo('products')">← Continue Shopping</button>
+                        <button type="button" class="btn btn-whatsapp" onclick="sendWhatsAppOrder()">
+                            <span class="whatsapp-icon">💬</span>
+                            Order via WhatsApp
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCheckoutSummary() {
+            const container = document.getElementById('checkout-order-items');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--gray);">Your cart is empty. <span style="color: var(--primary); cursor: pointer;" onclick="navigateTo(\'products\')">Shop now</span></p>';
+                document.getElementById('checkout-order-total').textContent = '₹0';
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="summary-item">
+                    <span>${item.quantity}x ${item.name}</span>
+                    <span>₹${item.price * item.quantity}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('checkout-order-total').textContent = '₹' + calculateTotal();
+        }
+
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add items before checkout.');
+                navigateTo('products');
+                return;
+            }
+
+            alert('Order functionality would be implemented with a backend. For now, please use our WhatsApp ordering system from the cart page for a complete ordering experience.');
+            navigateTo('cart');
+        });
+
+        function renderOrderConfirmation() {
+            const orderDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('order-date').textContent = orderDate;
+
+            const itemsContainer = document.getElementById('order-items');
+            
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = '<p style="text-align: center; color: var(--gray);">No items in order</p>';
+                document.getElementById('order-total').textContent = '₹0';
+                return;
+            }
+
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="order-item">
+                    <span class="item-info">${item.quantity}x ${item.name}</span>
+                    <span class="item-total">₹${item.price * item.quantity}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('order-total').textContent = '₹' + calculateTotal();
+
+            // Clear cart after order
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function performSearch(query) {
+            const container = document.getElementById('search-results');
+            const lowerQuery = query.toLowerCase();
+
+            if (!query) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🥜</div>
+                        <h2>Start Searching</h2>
+                        <p>Enter a search term above to find your favorite snacks</p>
+                        <div class="suggestions">
+                            <span style="color: var(--gray);">Browse by category:</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'snacks')">Snacks</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'sweets')">Sweets</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'mixtures')">Mixtures</span>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(lowerQuery) ||
+                product.description.toLowerCase().includes(lowerQuery) ||
+                product.category.toLowerCase().includes(lowerQuery)
+            );
+
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h2>No Products Found</h2>
+                        <p>We couldn't find any products matching "${query}"</p>
+                        <div class="suggestions">
+                            <span style="color: var(--gray);">Try:</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'peanut')">Peanut</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'nice-peanut-koko')">Nice Peanut (Koko)</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'ellu')">Ellu</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'omapodi')">Omapodi</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'ginger-candy')">Ginger Candy</span>
+                            <span class="suggestion-tag" onclick="navigateTo('products', 'roasted-gram')">Roasted Gram</span>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <p class="results-count">Found ${filteredProducts.length} result${filteredProducts.length !== 1 ? 's' : ''} for "${query}"</p>
+                <div class="products-grid">
+                    ${filteredProducts.map(p => renderProductCard(p)).join('')}
+                </div>
+            `;
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            performSearch(query);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
